@@ -1,0 +1,178 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  html::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  body {
+    @apply bg-page text-white font-sans antialiased;
+    overflow-x: clip;
+    min-height: 100dvh;
+    -webkit-tap-highlight-color: transparent;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  body::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  #root {
+    min-height: 100dvh;
+  }
+
+  /* Design reference: top status-slot container (390×40, transparent) */
+  .container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 390px;
+    max-width: 100%;
+    height: 40px;
+    background: #00000000;
+    border-radius: 0;
+  }
+}
+
+@layer utilities {
+  /* Hide scrollbars while keeping overflow scroll. */
+  .scrollbar-hide {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  /* Horizontal padding that respects notches + stays readable on narrow phones */
+  .sx-gutter {
+    padding-left: max(1rem, env(safe-area-inset-left, 0px));
+    padding-right: max(1rem, env(safe-area-inset-right, 0px));
+  }
+
+  @media (min-width: 640px) {
+    .sx-gutter {
+      padding-left: max(1.25rem, env(safe-area-inset-left, 0px));
+      padding-right: max(1.25rem, env(safe-area-inset-right, 0px));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .sx-gutter {
+      padding-left: max(2rem, env(safe-area-inset-left, 0px));
+      padding-right: max(2rem, env(safe-area-inset-right, 0px));
+    }
+  }
+
+  @keyframes hero-emergency-blink {
+    0%,
+    100% {
+      color: #fecaca;
+      opacity: 1;
+      text-shadow: 0 0 10px rgba(248, 113, 113, 0.45);
+    }
+    50% {
+      color: #ef4444;
+      opacity: 0.82;
+      text-shadow: 0 0 22px rgba(239, 68, 68, 0.6);
+    }
+  }
+
+  .hero-emergency-blink {
+    animation: hero-emergency-blink 2.2s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-emergency-blink {
+      animation: none;
+      color: #f87171;
+      opacity: 1;
+      text-shadow: none;
+    }
+  }
+
+  /* Coverage strip: duplicated row + translate -50% = seamless loop (not Tailwind theme — always emitted). */
+  @keyframes coverage-marquee-scroll {
+    0% {
+      transform: translate3d(0, 0, 0);
+    }
+    100% {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: coverage-marquee-scroll 38s linear infinite;
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+      animation: none;
+    }
+  }
+}
+
+@layer components {
+  /* Primary yellow CTAs — same lemon → warm highlight → hot lemon as the logo wordmark. */
+  .btn-brand-gradient {
+    background-image: linear-gradient(
+      to bottom right,
+      theme("colors.brand.lemon"),
+      #fff3a0,
+      theme("colors.brand.lemonHot")
+    );
+    @apply text-neutral-950;
+  }
+
+  /* Desktop navbar: oval “pill” for the active section (react-scroll spy). */
+  .navbar-link-active {
+    @apply rounded-full bg-white/[0.12] px-4 py-2 font-semibold text-brand-lemon;
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.22),
+      0 0 0 1px rgba(248, 113, 113, 0.55);
+  }
+
+  /*
+   * Mobile nav overlay (design ref: 390×844, #0A1628).
+   * Figma used position absolute + left offset; in the app this is fixed full-viewport.
+   */
+  .page {
+    position: fixed;
+    inset: 0;
+    left: 0;
+    top: 0;
+    width: 100%;
+    max-width: 100%;
+    height: 100dvh;
+    min-height: 100dvh;
+    background: #0a1628;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+  }
+
+}
